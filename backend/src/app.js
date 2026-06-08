@@ -31,6 +31,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/tasks', taskRoutes); // Conectado a /api/tasks 🚀
 
+const errorHandler = require('./middlewares/errorMiddleware');
+app.use(errorHandler);
 app.get('/', (req, res) => {
   res.send('API de Control de Limpieza corriendo con seguridad avanzada activa 🛡️🚀');
 });

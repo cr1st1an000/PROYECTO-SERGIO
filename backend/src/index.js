@@ -1,4 +1,8 @@
 require('dotenv').config(); // Carga las variables del entorno primero
+const validateEnv = require('./utils/validateEnv');
+
+// Ejecutamos el validador
+validateEnv();
 const app = require('./app');
 const connectDB = require('./database');
 

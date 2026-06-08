@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
     sparse: true
   },
+  
+  equipoLimpieza: {
+    type: String,
+    sparse: true
+  },
 
   // Campos exclusivos para PROFESOR
   rfc: {
