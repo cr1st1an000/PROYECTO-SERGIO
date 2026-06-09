@@ -1,2 +1,0 @@
-id del alumno: 6a25fcb32bb8601dc63565b7
-token de maestro: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjVmZDZlMmJiODYwMWRjNjM1NjViYiIsInJvbGUiOiJQUk9GRVNPUiIsImlhdCI6MTc4MDg3NDY3NCwiZXhwIjoxNzgwODg5MDc0fQ.2pbgSIu51gHu9J1o6OUs-UWqbYLV-f1SYqCyM6h_9hY

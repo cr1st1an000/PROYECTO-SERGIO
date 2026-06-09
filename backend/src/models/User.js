@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'El rol es obligatorio']
   },
   
-  // Campos exclusivos para ESTUDIANTE
+  // ─── Campos exclusivos para ESTUDIANTE ───
   correo: {
     type: String,
     unique: true,
@@ -31,13 +31,19 @@ const userSchema = new mongoose.Schema({
     type: Number,
     sparse: true
   },
-  
   equipoLimpieza: {
     type: String,
-    sparse: true
+    sparse: true,
+    uppercase: true // Convertimos a mayúsculas para estandarizar
+  },
+  // 🟢 ¡AQUÍ ESTÁ EL CAMPO CLAVE QUE FALTABA!
+  grupo: {
+    type: String,
+    sparse: true,
+    uppercase: true
   },
 
-  // Campos exclusivos para PROFESOR
+  // ─── Campos exclusivos para PROFESOR ───
   rfc: {
     type: String,
     unique: true,

@@ -6,7 +6,7 @@ const { protect, isTeacher } = require('../middlewares/authMiddleware');
 // IMPORTAR NUESTROS NUEVOS VALIDADORES
 const { validateRegister, validateLogin } = require('../middlewares/authValidator');
 
-// Acoplamos las reglas de validación en medio de la ruta y el controlador
+// Rutas normales
 router.post('/register', validateRegister, registerUser);
 router.post('/login', validateLogin, loginUser);
 
