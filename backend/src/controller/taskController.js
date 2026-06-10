@@ -1,5 +1,5 @@
 // src/controller/taskController.js
-
+const mongoose = require('mongoose');
 const Task = require('../models/Task');
 const User = require('../models/User');
 
@@ -13,7 +13,10 @@ const createTask = async (req, res, next) => {
       res.status(400);
       return next(new Error('Faltan campos obligatorios para crear la tarea.'));
     }
-
+if (!mongoose.Types.ObjectId.isValid(estudianteAsignado)) {
+  res.status(400);
+  return next(new Error('ID de estudiante inválido.'));
+}
     const alumno = await User.findById(estudianteAsignado);
     if (!alumno || alumno.role !== 'ESTUDIANTE') {
       res.status(404);
@@ -29,7 +32,14 @@ const createTask = async (req, res, next) => {
       res.status(400);
       return next(new Error(`No coinciden. (Alumno: ${alumno.grupo} | Profesor: ${grupoProfesor})`));
     }
+    const fecha = new Date(fechaEntrega);
 
+if (fecha <= new Date()) {
+  res.status(400);
+  return next(
+    new Error('La fecha de entrega debe ser posterior al momento actual.')
+  );
+}
     const newTask = new Task({
       descripcion,
       grupo: grupoProfesor,

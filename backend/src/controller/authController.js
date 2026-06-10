@@ -21,15 +21,39 @@ const registerUser = async (req, res) => {
       userData.grupo = grupo.toUpperCase(); // Estandarizamos a mayúsculas
 
     } else if (role === 'PROFESOR') {
-      if (claveEscolar !== process.env.CLAVE_ESCOLAR_PROFESOR) {
-        return res.status(401).json({ msg: 'La clave única del departamento escolar es incorrecta.' });
-      }
-      const rfcExists = await User.findOne({ rfc: rfc.toUpperCase() });
-      if (rfcExists) return res.status(400).json({ msg: 'El RFC ya se encuentra registrado.' });
 
-      userData.rfc = rfc.toUpperCase();
-      userData.grupoAsignado = grupoAsignado.toUpperCase();
-    }
+if (!rfc) {
+return res.status(400).json({
+msg: 'El RFC es obligatorio.'
+});
+}
+
+if (
+claveEscolar !==
+process.env.CLAVE_ESCOLAR_PROFESOR
+) {
+return res.status(401).json({
+msg: 'La clave única del departamento escolar es incorrecta.'
+});
+}
+
+const rfcUpper = rfc.toUpperCase();
+
+const rfcExists = await User.findOne({
+rfc: rfcUpper
+});
+
+if (rfcExists) {
+return res.status(400).json({
+msg: 'El RFC ya se encuentra registrado.'
+});
+}
+
+userData.rfc = rfcUpper;
+userData.grupoAsignado =
+grupoAsignado.toUpperCase();
+}
+
 
     const newUser = new User(userData);
     await newUser.save();
@@ -53,8 +77,17 @@ const loginUser = async (req, res) => {
     if (role === 'ESTUDIANTE') {
       user = await User.findOne({ correo });
     } else if (role === 'PROFESOR') {
-      user = await User.findOne({ rfc: rfc.toUpperCase() });
-    }
+
+if (!rfc) {
+return res.status(400).json({
+msg: 'RFC requerido.'
+});
+}
+
+user = await User.findOne({
+rfc: rfc.toUpperCase()
+});
+}
 
     // MENSAJE DISCRETO: Si el usuario no existe, usamos un mensaje genérico
     if (!user) {

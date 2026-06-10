@@ -1,44 +1,69 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Middleware para verificar que el usuario esté logueado mediante un Token válido
 const protect = async (req, res, next) => {
-  let token;
+let token;
 
-  // Comprobar si el token viaja en las cabeceras HTTP como 'Bearer TOKEN_AQUÍ'
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    try {
-      // Separar la palabra 'Bearer' del token real
-      token = req.headers.authorization.split(' ')[1];
+if (
+req.headers.authorization &&
+req.headers.authorization.startsWith('Bearer')
+) {
+try {
+token = req.headers.authorization.split(' ')[1];
 
-      // Decodificar y verificar el token con nuestra palabra secreta
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Buscar al usuario de la sesión en la base de datos (excluyendo la contraseña por seguridad)
-      req.user = await User.findById(decoded.id).select('-password');
+  const decoded = jwt.verify(
+    token,
+    process.env.JWT_SECRET
+  );
 
-      return next(); // Dar luz verde a la siguiente función/ruta
-    } catch (error) {
-      console.error('Error en la verificación del token:', error);
-      return res.status(401).json({ msg: 'No autorizado, token corrupto o expirado.' });
-    }
+  const user = await User.findById(decoded.id)
+    .select('-password');
+
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      msg: 'El usuario asociado al token ya no existe.'
+    });
   }
 
-  if (!token) {
-    return res.status(401).json({ msg: 'Acceso denegado, no se proporcionó ningún token de seguridad.' });
-  }
+  req.user = user;
+
+  return next();
+
+} catch (error) {
+  console.error('Error en JWT:', error);
+
+  return res.status(401).json({
+    success: false,
+    msg: 'Token inválido o expirado.'
+  });
+}
+
+
+}
+
+return res.status(401).json({
+success: false,
+msg: 'No se proporcionó token de autenticación.'
+});
 };
 
-// Middleware para restringir accesos exclusivos únicamente a profesores
 const isTeacher = (req, res, next) => {
-  if (req.user && req.user.role === 'PROFESOR') {
-    next();
-  } else {
-    return res.status(403).json({ msg: 'Acceso denegado. Se requieren privilegios de Profesor.' });
-  }
+if (
+req.user &&
+req.user.role === 'PROFESOR'
+) {
+return next();
+}
+
+return res.status(403).json({
+success: false,
+msg: 'Acceso denegado. Solo profesores.'
+});
 };
 
 module.exports = {
-  protect,
-  isTeacher
+protect,
+isTeacher
 };

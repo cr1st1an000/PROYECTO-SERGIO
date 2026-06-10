@@ -1,7 +1,12 @@
 // src/utils/validateEnv.js
 
 const validateEnv = () => {
-  const requiredVariables = ['PORT', 'MONGO_URI', 'JWT_SECRET'];
+const requiredVariables = [
+  'PORT',
+  'MONGO_URI',
+  'JWT_SECRET',
+  'CLAVE_ESCOLAR_PROFESOR'
+];
   const missingVariables = [];
 
   // Revisar cuáles faltan

@@ -32,5 +32,13 @@ const taskSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+taskSchema.index({
+  grupo: 1
+});
+
+taskSchema.index({
+  grupo: 1,
+  estado: 1
+});
 
 module.exports = mongoose.model('Task', taskSchema);
